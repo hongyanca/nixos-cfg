@@ -6,7 +6,13 @@
   config,
   pkgs,
   ...
-}: {
+}: let
+  unstable = import inputs.nixpkgs-unstable {
+    # system = pkgs.system;
+    system = pkgs.stdenv.hostPlatform.system;
+    config.allowUnfree = true;
+  };
+in {
   # You can import other home-manager modules here
   imports = [
     # If you want to use home-manager modules from other flakes (such as nix-colors):
@@ -21,8 +27,23 @@
     homeDirectory = "/home/yanh";
   };
 
-  # Add stuff for your user as you see fit:
-  programs.neovim.enable = true;
+
+  home.sessionPath = [
+    "$HOME/.npm-packages/bin"
+  ];
+
+  home.file.".npmrc".text = ''
+    prefix=${config.home.homeDirectory}/.npm-packages
+  '';
+
+  programs.neovim = {
+    enable = true;
+    package = unstable.neovim-unwrapped;
+    viAlias = true;
+    vimAlias = true;
+    defaultEditor = true;
+  };
+
 
   home.packages = with pkgs;[
     # archivers
@@ -37,12 +58,10 @@
     gnupg
     gnused
     ripgrep
+    fd
     jq
     yq-go
-    fzf
-    zoxide
     lsd
-    starship
 
     # networking
     mtr
@@ -72,6 +91,12 @@
     ethtool
     pciutils
     usbutils
+
+    # neovim
+    tree-sitter
+    gcc
+    gnumake
+    nodejs_24
   ];
 
   programs.git = {
@@ -94,8 +119,6 @@
     enable = true;
     
     shellAliases = {
-      vi = "nvim";
-      vim = "nvim";
       ls = "lsd";
       l = "ls -l";
       la = "ls -la";
@@ -121,20 +144,31 @@
     enable = true;
     settings = {
       add_newline = false;
-  
+ 
       aws.disabled = true;
       gcloud.disabled = true;
       line_break.disabled = true;
-  
-      format = "  $directory$character";
-  
+
+      format = "  $directory$git_branch$git_status$character";
+
       directory = {
         format = "[$path]($style) ";
         style = "bold blue";
         truncation_length = 16;
         home_symbol = "~";
       };
-  
+
+      git_branch = {
+        format = "[$symbol$branch]($style) ";
+        symbol = " ";
+        style = "bold purple";
+      };
+
+      git_status = {
+        format = "([$all_status$ahead_behind]($style) )";
+        style = "bold yellow";
+      };
+
       character = {
         success_symbol = "[❯](bold green)";
         error_symbol = "[❯](bold red)";

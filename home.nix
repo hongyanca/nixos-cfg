@@ -46,6 +46,8 @@ in {
 
 
   home.packages = with pkgs;[
+    home-manager
+
     # archivers
     zip
     xz
@@ -57,7 +59,9 @@ in {
     gawk
     gnupg
     gnused
+    gdu
     ripgrep
+    delta
     fd
     jq
     yq-go
@@ -101,8 +105,42 @@ in {
 
   programs.git = {
     enable = true;
-    settings.user.name = "Hong Yan";
-    settings.user.email = "contact@hongyan.ca";
+
+    settings = {
+      user = {
+        name = "Hong Yan";
+        email = "contact@hongyan.ca";
+        signingkey = "~/.ssh/github-hongyanca.pub";
+      };
+
+      init.defaultBranch = "main";
+
+      pull.rebase = true;
+
+      rebase = {
+        autosquash = true;
+        autostash = true;
+      };
+
+      interactive.diffFilter = "delta --color-only";
+
+      delta = {
+        navigate = true;
+        side-by-side = true;
+      };
+
+      alias = {
+        more = "commit --amend --no-edit";
+      };
+
+      gpg = {
+        program = "gpg2";
+        format = "ssh";
+      };
+
+      commit.gpgsign = true;
+      tag.gpgSign = true;
+    };
   };
 
   programs.fzf = {
@@ -125,6 +163,9 @@ in {
       ".." = "cd ..";
       "..." = "cd ../..";
       j = "z";
+      rebuild = "sudo nixos-rebuild switch";
+      update-system = "nix flake update --flake /etc/nixos && sudo nixos-rebuild switch";
+      dump-garbage = "sudo nix-collect-garbage -d && sudo nix-store --optimise && df -h";
     };
 
     initContent = ''
@@ -160,8 +201,8 @@ in {
 
       git_branch = {
         format = "[$symbol$branch]($style) ";
-        symbol = " ";
-        style = "bold purple";
+        symbol = " ";
+        style = "green";
       };
 
       git_status = {

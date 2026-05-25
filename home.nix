@@ -195,8 +195,9 @@ in {
       directory = {
         format = "[$path]($style) ";
         style = "bold blue";
-        truncation_length = 16;
         home_symbol = "~";
+        truncate_to_repo = false;
+        fish_style_pwd_dir_length = 1;
       };
 
       git_branch = {

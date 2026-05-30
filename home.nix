@@ -42,11 +42,13 @@ in {
     viAlias = true;
     vimAlias = true;
     defaultEditor = true;
+    sideloadInitLua = true;
   };
 
 
   home.packages = with pkgs;[
     home-manager
+    hydra-check
 
     # archivers
     zip
@@ -155,6 +157,7 @@ in {
 
   programs.zsh = {
     enable = true;
+    syntaxHighlighting.enable = true;
     
     shellAliases = {
       ls = "lsd";
@@ -189,9 +192,21 @@ in {
       aws.disabled = true;
       gcloud.disabled = true;
       line_break.disabled = true;
+      right_format = "$username$hostname";
 
       format = "  $directory$git_branch$git_status$character";
 
+      username = {
+        format = "[$user]($style)";
+        style_user = "yellow";
+        style_root = "bold red";
+        show_always = true;
+      };
+      hostname = {
+        format = "[@$hostname]($style)";
+        style = "yellow";
+        ssh_only = false;
+      };
       directory = {
         format = "[$path]($style) ";
         style = "bold blue";

@@ -97,7 +97,7 @@ User packages include tools such as:
 * `mtr`, `iperf3`, `dnsutils`, `aria2`, `socat`, `nmap`
 * `bat`, `fastfetch`, `btop`, `htop`, `iotop`, `iftop`
 * `sysstat`, `lm_sensors`, `ethtool`, `pciutils`, `usbutils`
-* `mise`, `devenv`, `tree-sitter`, `gcc`, `gnumake`
+* `mise`, `tree-sitter`, `gcc`, `gnumake`
 * `nodejs_24`
 * `python314`
 

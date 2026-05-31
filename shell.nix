@@ -20,6 +20,7 @@
       ".." = "cd ..";
       "..." = "cd ../..";
       j = "z";
+      ubuntu = "distrobox enter ubuntu-box --no-workdir";
       rebuild = "sudo nixos-rebuild switch";
       rebuild-home = "sudo nixos-rebuild switch --flake ~/.nixos-cfg#nixos";
       update-system = "nix flake update --flake /etc/nixos && sudo nixos-rebuild switch";

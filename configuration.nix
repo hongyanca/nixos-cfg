@@ -105,6 +105,9 @@
   # Passwordless sudo for wheel (simplest)
   security.sudo.wheelNeedsPassword = false;
 
+  # https://wiki.nixos.org/wiki/Python_quickstart_using_uv
+  programs.nix-ld.enable = true;
+
   # programs.firefox.enable = true;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -119,12 +122,14 @@
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     curl
+    wget
     git
     htop
     tmux
     tree
-    wget
     zsh
+    distrobox
+    podman
     podman-compose
     buildah
     skopeo
@@ -151,6 +156,21 @@
     };
     openFirewall = true;
   };
+
+  # Enable Flatpak
+  services.flatpak.enable = true;
+  xdg.portal = {
+    enable = true;
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
+    ];
+    config = {
+      common = {
+        default = [ "gtk" ];
+      };
+    };
+  };
+
 
   virtualisation.podman = {
     enable = true;

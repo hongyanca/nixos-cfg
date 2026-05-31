@@ -236,8 +236,7 @@ GitHub.sublime-settings
         more = "commit --amend --no-edit";
         pfa = ''
           !git fetch --all &&
-          git push --force-with-lease github HEAD &&
-          git push --force-with-lease codeberg HEAD &&
+          git push origin --force &&
           git fetch --all
         '';
       };

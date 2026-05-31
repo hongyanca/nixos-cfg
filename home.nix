@@ -105,7 +105,7 @@ in {
 
     # dev
     mise
-    devenv
+    uv
     tree-sitter
     gcc
     gnumake

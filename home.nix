@@ -30,8 +30,10 @@ in {
 
   home.sessionPath = [
     "$HOME/.npm-packages/bin"
+    "$HOME/.local/share/mise/shims"
   ];
 
+  home.file.".gitignore_global".text = "";
   home.file.".npmrc".text = ''
     prefix=${config.home.homeDirectory}/.npm-packages
   '';
@@ -46,7 +48,7 @@ in {
   };
 
 
-  home.packages = with pkgs;[
+  home.packages = (with pkgs; [
     home-manager
     hydra-check
 
@@ -68,6 +70,8 @@ in {
     jq
     yq-go
     lsd
+    mise
+    devenv
 
     # networking
     mtr
@@ -103,7 +107,12 @@ in {
     gcc
     gnumake
     nodejs_24
-  ];
+  ]) ++ (with inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}; [
+    antigravity
+    codex
+    opencode
+    rtk
+  ]);
 
   programs.git = {
     enable = true;
@@ -115,6 +124,12 @@ in {
         signingkey = "~/.ssh/github-hongyanca.pub";
       };
 
+      core = {
+        editor = "nvim";
+        pager = "delta";
+        excludesFile = "/home/yanh/.gitignore_global";
+        ignoreCase = false;
+      };
       init.defaultBranch = "main";
 
       pull.rebase = true;

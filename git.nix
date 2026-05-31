@@ -196,6 +196,7 @@ GitHub.sublime-settings
 
 ### End Global.gitignore
   '';
+
   programs.git = {
     enable = true;
 
@@ -233,6 +234,12 @@ GitHub.sublime-settings
 
       alias = {
         more = "commit --amend --no-edit";
+        pfa = ''
+          !git fetch --all &&
+          git push --force-with-lease github HEAD &&
+          git push --force-with-lease codeberg HEAD &&
+          git fetch --all
+        '';
       };
 
       gpg = {
